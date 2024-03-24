@@ -2,7 +2,7 @@ import express, { type Express } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import userController from "./controller/user";
-
+import cors from "cors";
 dotenv.config()
 
 const PORT = process.env.PORT;
@@ -25,6 +25,7 @@ async function connectDB(URI: string) {
 const app: Express = express()
 
 app.use(express.json());
+app.use(cors());
 app.use("/user", userController);
 
 app.listen(PORT, async () => {

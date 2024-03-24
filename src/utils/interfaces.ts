@@ -29,7 +29,8 @@ interface Code {
 
 export interface RegisterResponse extends Code {
     message?: string,
-    error?: string
+    error?: string,
+    isLoggedIn?: true
 }
 
 export interface UpdateResponse extends Code {

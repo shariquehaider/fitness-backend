@@ -4,9 +4,7 @@ import jwt from "jsonwebtoken";
 
 export async function handleHash(password: string): Promise<string> {
     try {
-        const salt: string = await bcrypt.genSalt(10);
-        console.log(salt)
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashedPassword = await bcrypt.hash(password, 12);
         return hashedPassword;
     } catch (err) {
         throw new Error("Error hashing password");
@@ -14,7 +12,8 @@ export async function handleHash(password: string): Promise<string> {
 }
 
 
-export function generateToken (email: string, secretKey: string): string {
-    const token = jwt.sign(email, secretKey, { expiresIn: '1d' });
+export function generateToken (userId: string, secretKey: string): string {
+    const token = jwt.sign(userId, secretKey);
+    console.log(token)
     return token;
 }

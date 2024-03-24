@@ -1,4 +1,4 @@
-import User from "../models/user"
+import User from "../models/user";
 import {
     RegisterUser,
     LoginCreds,
@@ -11,6 +11,7 @@ import {
 } from "../utils/interfaces";
 import { generateToken, handleHash } from "../utils/utils";
 import { secretKey } from "../index";
+import bcrypt from "bcryptjs";
 
 export async function registerUserHelper(user: RegisterUser): Promise<RegisterResponse> {
     try {
@@ -26,8 +27,7 @@ export async function registerUserHelper(user: RegisterUser): Promise<RegisterRe
             });
 
             const savedUser = await newUser.save();
-            console.log(savedUser);
-            return { code: 1, message: "User Registered Sucessfully" };
+            return { code: 1, message: "User Registered Sucessfully", isLoggedIn: true };
         }
     } catch (err) {
         return { code: 0, error: err as string };
@@ -40,8 +40,9 @@ export async function loginUserHelper(loginCreds: LoginCreds) {
         if (!foundUser) {
             throw new Error("Email not found");
         } else {
-            const userHashedPassword = await handleHash(loginCreds.password);
-            if (userHashedPassword === foundUser.password) {
+            const isMatched: boolean = await bcrypt.compare(loginCreds.password, foundUser.password as string);
+            if (isMatched) {
+                console.log("hi")
                 const token = generateToken(loginCreds.email, secretKey as string);
                 foundUser.token = token;
                 await foundUser.save();

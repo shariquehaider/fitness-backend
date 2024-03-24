@@ -12,7 +12,6 @@ userController.get("/", (req: Request, res: Response) => {
 
 userController.post("/register", async (req: Request, res: Response) => {
     const user = req.body;
-    console.log(user)
     const response = await registerUserHelper(user);
     if (response.code === 1) {
         res.json({message: response.message, code: response.code});
@@ -21,7 +20,7 @@ userController.post("/register", async (req: Request, res: Response) => {
     }
 });
 
-userController.get("/login", async (req: Request, res: Response) => {
+userController.post("/login", async (req: Request, res: Response) => {
     const user: LoginCreds = req.body;
     const response = await loginUserHelper(user);
     if (response.code === 1) {
